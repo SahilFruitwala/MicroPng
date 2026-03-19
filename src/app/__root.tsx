@@ -8,6 +8,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { PostHogProvider } from '@posthog/react'
 import './globals.css'
 
 const canonicalUrl = 'https://micropng.sahilfruitwala.com'
@@ -104,15 +105,26 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+        <PostHogProvider
+          apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN!}
+          options={{
+            api_host: '/ingest',
+            ui_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST || 'https://us.posthog.com',
+            defaults: '2025-05-24',
+            capture_exceptions: true,
+            debug: import.meta.env.DEV,
+          }}
         >
-          {children}
-          <Analytics />
-        </ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Analytics />
+          </ThemeProvider>
+        </PostHogProvider>
         <Scripts />
       </body>
     </html>

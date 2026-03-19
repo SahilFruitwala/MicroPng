@@ -10,8 +10,10 @@ import { CompressedFile } from '@/types';
 import { MAX_SERVER_IMAGES, LIMIT_REASONS } from '@/lib/constants';
 import PageHeader from '@/components/ui/PageHeader';
 import GlassCard from '@/components/ui/GlassCard';
+import { usePostHog } from '@posthog/react';
 
 export default function WatermarkClient() {
+  const posthog = usePostHog();
   const [files, setFiles] = useState<CompressedFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorVisible, setError] = useState<string | null>(null);
@@ -121,8 +123,16 @@ export default function WatermarkClient() {
                     };
                 }));
 
+                posthog.capture('image_watermarked', {
+                    watermark_type: watermarkConfig.type,
+                    watermark_position: watermarkConfig.position,
+                    watermark_opacity: watermarkConfig.opacity,
+                    file_type: file.type,
+                });
+
             } catch (error) {
                 console.error(error);
+                posthog.captureException(error);
                  setFiles(prev => prev.map(f => f.id === fileId ? {
                     ...f,
                     status: 'error',

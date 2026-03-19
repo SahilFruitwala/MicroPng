@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import JSZip from 'jszip';
+import { usePostHog } from '@posthog/react';
 
 import Dropzone from '@/components/Dropzone';
 import ResultCard from '@/components/ResultCard';
@@ -18,6 +19,7 @@ import { Terminal, ArrowRight, Github } from 'lucide-react';
 import { Link } from '@tanstack/react-router'
 
 export default function HomeClient() {
+  const posthog = usePostHog();
   const [files, setFiles] = useState<CompressedFile[]>([]);
   const [isProcesssing, setIsProcessing] = useState(false);
   const [isZipping, setIsZipping] = useState(false);
@@ -49,6 +51,9 @@ export default function HomeClient() {
           link.download = `micropng-compressed.zip`;
           link.click();
           URL.revokeObjectURL(zipUrl);
+          posthog.capture('images_downloaded_as_zip', {
+            file_count: doneFiles.length,
+          });
       } catch (error) {
           console.error('Error creating ZIP:', error);
       } finally {
@@ -217,8 +222,29 @@ export default function HomeClient() {
                     return newFile;
                 }));
 
+                if (processingMode === 'client' && clientRes?.success && clientRes.blob) {
+                    posthog.capture('image_compressed', {
+                        mode: 'client',
+                        compression_level: compressionLevel,
+                        original_size: file.size,
+                        compressed_size: clientRes.blob.size,
+                        reduction_percent: Math.round(((file.size - clientRes.blob.size) / file.size) * 100),
+                        file_type: file.type,
+                    });
+                } else if (processingMode === 'server' && serverRes?.success && serverRes.blob) {
+                    posthog.capture('image_compressed', {
+                        mode: 'server',
+                        compression_level: compressionLevel,
+                        original_size: file.size,
+                        compressed_size: serverRes.blob.size,
+                        reduction_percent: Math.round(((file.size - serverRes.blob.size) / file.size) * 100),
+                        file_type: file.type,
+                    });
+                }
+
             } catch (error) {
                 console.error(error);
+                posthog.captureException(error);
                  setFiles(prev => prev.map(f => f.id === fileId ? {
                     ...f,
                     status: 'error',
@@ -339,6 +365,9 @@ export default function HomeClient() {
                                          onClick={() => {
                                              const newMode = processingMode === 'client' ? 'server' : 'client';
                                              setProcessingMode(newMode);
+                                             posthog.capture('compression_mode_switched', {
+                                               new_mode: newMode,
+                                             });
                                          }}
                                          title={isMobile && processingMode === 'server' ? "Browser compression is not recommended on mobile but can be enabled" : ""}
                                      >
@@ -474,9 +503,10 @@ export default function HomeClient() {
                   We've built a high-performance CLI for bulk processing, recursive directory optimization, and automated workflows. No browser, just pure speed.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Link 
-                    to="/cli" 
+                  <Link
+                    to="/cli"
                     className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm flex items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20"
+                    onClick={() => posthog.capture('cli_explore_clicked', { source: 'home' })}
                   >
                     Explore CLI
                     <ArrowRight size={16} />

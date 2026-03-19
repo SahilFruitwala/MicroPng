@@ -10,10 +10,12 @@ import { CompressedFile } from '@/types';
 import JSZip from 'jszip';
 import PageHeader from '@/components/ui/PageHeader';
 import GlassCard from '@/components/ui/GlassCard';
+import { usePostHog } from '@posthog/react';
 
 type TargetFormat = 'png' | 'jpeg' | 'webp' | 'avif';
 
 export default function ConvertClient() {
+  const posthog = usePostHog();
   const [files, setFiles] = useState<CompressedFile[]>([]);
   const [isProcesssing, setIsProcessing] = useState(false);
   const [isZipping, setIsZipping] = useState(false);
@@ -43,6 +45,10 @@ export default function ConvertClient() {
           link.download = `micropng-converted.zip`;
           link.click();
           URL.revokeObjectURL(zipUrl);
+          posthog.capture('images_downloaded_as_zip', {
+            file_count: doneFiles.length,
+            target_format: targetFormat,
+          });
       } catch (error) {
           console.error('Error creating ZIP:', error);
       } finally {
@@ -109,8 +115,16 @@ export default function ConvertClient() {
                     blobUrl: url
                 } : f));
 
+                posthog.capture('image_converted', {
+                    original_format: originalFormat,
+                    target_format: targetFormat,
+                    original_size: fileObj.originalSize,
+                    converted_size: blob.size,
+                });
+
             } catch (error) {
                 console.error(error);
+                posthog.captureException(error);
                  setFiles(prev => prev.map(f => f.id === fileObj.id ? {
                     ...f,
                     status: 'error',

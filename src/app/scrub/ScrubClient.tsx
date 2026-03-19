@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Dropzone from '@/components/Dropzone';
 import PageHeader from '@/components/ui/PageHeader';
 import GlassCard from '@/components/ui/GlassCard';
+import { usePostHog } from '@posthog/react';
 
 interface ExifData {
     [key: string]: any;
@@ -21,6 +22,7 @@ interface ScannedFile {
 }
 
 export default function ScrubClient() {
+  const posthog = usePostHog();
   const [file, setFile] = useState<ScannedFile | null>(null);
 
   const handleFileSelect = async (selectedFiles: File[]) => {
@@ -81,8 +83,14 @@ export default function ScrubClient() {
         const url = URL.createObjectURL(blob);
 
         setFile(prev => prev ? { ...prev, scrubbedUrl: url, status: 'done' } : null);
+        posthog.capture('image_scrubbed', {
+            file_type: file?.file.type,
+            file_size: file?.file.size,
+            metadata_fields_count: file?.metadata ? Object.keys(file.metadata).length : 0,
+        });
     } catch (e) {
         console.error(e);
+        posthog.captureException(e);
         setFile(prev => prev ? { ...prev, status: 'error' } : null);
     }
   };

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import sharp from 'sharp'
+import { getPostHogClient } from '@/utils/posthog-server'
 
 // Configuration: Adjust these limits as needed
 const MAX_WIDTH = 1920
@@ -198,6 +199,15 @@ export const Route = createFileRoute('/api/compress')({
           })
         } catch (error) {
           console.error('Compression error:', error)
+          const posthog = getPostHogClient()
+          posthog.capture({
+            distinctId: 'server',
+            event: 'compress_api_error',
+            properties: {
+              error: error instanceof Error ? error.message : String(error),
+              source: 'api',
+            },
+          })
           return Response.json({ error: 'Compression failed' }, { status: 500 })
         }
       },

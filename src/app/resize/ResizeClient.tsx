@@ -3,6 +3,7 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { usePostHog } from '@posthog/react';
 import Dropzone from '@/components/Dropzone';
 import { CompressedFile } from '@/types';
 import JSZip from 'jszip';
@@ -22,6 +23,7 @@ const SOCIAL_PRESETS = [
 ];
 
 export default function ResizeClient() {
+    const posthog = usePostHog();
     const [file, setFile] = useState<CompressedFile | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     
@@ -119,12 +121,17 @@ export default function ResizeClient() {
         }
     };
 
-    const applyPreset = (width: number, height: number, aspect: number) => {
+    const applyPreset = (width: number, height: number, aspect: number, label?: string) => {
         setResizeWidth(width.toString());
         setResizeHeight(height.toString());
         setAspectRatio(aspect);
         setResizeFit('cover');
         setLockAspectRatio(true);
+        posthog.capture('resize_preset_applied', {
+            preset_label: label,
+            preset_width: width,
+            preset_height: height,
+        });
 
         // Update crop if in crop mode
         if (imgRef.current) {
@@ -181,8 +188,17 @@ export default function ResizeClient() {
                 compressedSize: blob.size,
                 blobUrl: url
             } : null);
+            posthog.capture('image_resized', {
+                target_width: parseInt(resizeWidth) || null,
+                target_height: parseInt(resizeHeight) || null,
+                fit_mode: resizeFit,
+                has_crop: !!completedCrop,
+                original_size: file?.originalSize,
+                output_size: blob.size,
+            });
         } catch (error) {
             console.error(error);
+            posthog.captureException(error);
             setFile(prev => prev ? { ...prev, status: 'error' } : null);
         } finally {
             setIsProcessing(false);
@@ -316,7 +332,7 @@ export default function ResizeClient() {
                                             {SOCIAL_PRESETS.map(preset => (
                                                 <button
                                                     key={preset.label}
-                                                    onClick={() => applyPreset(preset.width, preset.height, preset.aspect)}
+                                                    onClick={() => applyPreset(preset.width, preset.height, preset.aspect, preset.label)}
                                                     className="flex flex-col items-center justify-center p-2 rounded-xl bg-surface/50 border border-border hover:border-primary/50 hover:bg-surface-hover transition-all group"
                                                 >
                                                     <span className="text-xl mb-1 group-hover:scale-110 transition-transform">{preset.icon}</span>

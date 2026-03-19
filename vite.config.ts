@@ -5,13 +5,21 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   // Expose the existing Next-style public env vars to the client.
-  envPrefix: ['NEXT_PUBLIC_'],
+  envPrefix: ['NEXT_PUBLIC_', 'VITE_PUBLIC_'],
   resolve: {
     tsconfigPaths: true,
   },
   server: {
     port: 3000,
     strictPort: true,
+    proxy: {
+      '/ingest': {
+        target: 'https://us.i.posthog.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ingest/, ''),
+        secure: false,
+      },
+    },
   },
   plugins: [
     tailwindcss(),

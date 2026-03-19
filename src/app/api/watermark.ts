@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import sharp from 'sharp'
+import { getPostHogClient } from '@/utils/posthog-server'
 
 // Configuration: Adjust these limits as needed
 const MAX_WIDTH = 8192
@@ -157,6 +158,15 @@ export const Route = createFileRoute('/api/watermark')({
           })
         } catch (error) {
           console.error('Watermark error:', error)
+          const posthog = getPostHogClient()
+          posthog.capture({
+            distinctId: 'server',
+            event: 'watermark_api_error',
+            properties: {
+              error: error instanceof Error ? error.message : String(error),
+              source: 'api',
+            },
+          })
           return Response.json(
             { error: 'Watermark failed' },
             { status: 500 },

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import sharp from 'sharp'
+import { getPostHogClient } from '@/utils/posthog-server'
 
 export const Route = createFileRoute('/api/scrub')({
   server: {
@@ -57,6 +58,15 @@ export const Route = createFileRoute('/api/scrub')({
           return Response.json({ error: 'Invalid action' }, { status: 400 })
         } catch (error) {
           console.error('Scrub error:', error)
+          const posthog = getPostHogClient()
+          posthog.capture({
+            distinctId: 'server',
+            event: 'scrub_api_error',
+            properties: {
+              error: error instanceof Error ? error.message : String(error),
+              source: 'api',
+            },
+          })
           return Response.json(
             { error: 'Failed to process image' },
             { status: 500 },
