@@ -11,6 +11,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import './globals.css'
 
 const canonicalUrl = 'https://micropng.sahilfruitwala.com'
+const ogImageUrl = `${canonicalUrl}/opengraph.webp`
 const title = 'MicroPng - Professional Image Compression'
 const description =
   'Fast, secure, and professional-grade image compression directly in your browser. Lossless optimization for PNG, JPEG, and WebP.'
@@ -38,18 +39,51 @@ export const Route = createRootRoute({
       { property: 'og:site_name', content: 'MicroPng' },
       { property: 'og:locale', content: 'en_US' },
       { property: 'og:type', content: 'website' },
-      { property: 'og:image', content: '/opengraph.webp' },
+      { property: 'og:image', content: ogImageUrl },
 
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
       { name: 'twitter:creator', content: '@micropng' },
-      { name: 'twitter:image', content: '/opengraph.webp' },
+      { name: 'twitter:image', content: ogImageUrl },
     ],
     links: [
       { rel: 'canonical', href: `${canonicalUrl}/` },
       { rel: 'icon', href: '/icon.webp' },
       { rel: 'apple-touch-icon', href: '/icon.webp' },
+    ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'MicroPng',
+          url: canonicalUrl,
+          description,
+          inLanguage: 'en',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: `${canonicalUrl}/?q={search_term_string}`,
+            'query-input': 'required name=search_term_string',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'MicroPng',
+            url: canonicalUrl,
+          },
+        }),
+      },
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'MicroPng',
+          url: canonicalUrl,
+          logo: `${canonicalUrl}/icon.webp`,
+        }),
+      },
     ],
   }),
   component: RootLayout,

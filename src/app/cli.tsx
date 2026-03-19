@@ -18,10 +18,11 @@ const keywords = [
 ]
 
 const canonicalUrl = 'https://micropng.sahilfruitwala.com/cli'
+const baseUrl = 'https://micropng.sahilfruitwala.com'
 const ogTitle = 'MicroPng CLI - Professional Command Line Image Optimization'
 const ogDescription =
   'Recursive, blazing-fast, and local-first image compression for your terminal. Supports PNG, JPEG, WebP, and AVIF.'
-const ogImage = '/opengraph.webp'
+const ogImageUrl = `${baseUrl}/opengraph.webp`
 
 export const Route = createFileRoute('/cli')({
   component: CliPage,
@@ -35,7 +36,7 @@ export const Route = createFileRoute('/cli')({
       { property: 'og:description', content: ogDescription },
       { property: 'og:url', content: canonicalUrl },
       { property: 'og:type', content: 'website' },
-      { property: 'og:image', content: ogImage },
+      { property: 'og:image', content: ogImageUrl },
     ],
     links: [{ rel: 'canonical', href: canonicalUrl }],
   }),

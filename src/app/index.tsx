@@ -16,7 +16,7 @@ const keywords = [
 ]
 
 const canonicalUrl = 'https://micropng.sahilfruitwala.com'
-const ogImage = '/opengraph.webp'
+const ogImageUrl = `${canonicalUrl}/opengraph.webp`
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -28,12 +28,12 @@ export const Route = createFileRoute('/')({
 
       { property: 'og:title', content: title },
       { property: 'og:description', content: description },
-      { property: 'og:image', content: ogImage },
+      { property: 'og:image', content: ogImageUrl },
 
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
-      { name: 'twitter:image', content: ogImage },
+      { name: 'twitter:image', content: ogImageUrl },
     ],
     links: [{ rel: 'canonical', href: `${canonicalUrl}/` }],
   }),

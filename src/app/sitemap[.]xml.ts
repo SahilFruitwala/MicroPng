@@ -15,6 +15,8 @@ const routes = [
   '/scrub',
   '/compare',
   '/cli',
+  '/privacy',
+  '/terms',
 ]
 
 function toDateOnlyISO(d: Date) {

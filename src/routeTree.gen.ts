@@ -20,6 +20,7 @@ import { Route as PrivacyRouteImport } from './app/privacy'
 import { Route as PdfRouteImport } from './app/pdf'
 import { Route as PaletteRouteImport } from './app/palette'
 import { Route as ManifestDotwebmanifestRouteImport } from './app/manifest[.]webmanifest'
+import { Route as LlmsDottxtRouteImport } from './app/llms[.]txt'
 import { Route as GlassRouteImport } from './app/glass'
 import { Route as FiltersRouteImport } from './app/filters'
 import { Route as FaviconRouteImport } from './app/favicon'
@@ -88,6 +89,11 @@ const PaletteRoute = PaletteRouteImport.update({
 const ManifestDotwebmanifestRoute = ManifestDotwebmanifestRouteImport.update({
   id: '/manifest.webmanifest',
   path: '/manifest.webmanifest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GlassRoute = GlassRouteImport.update({
@@ -170,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/favicon': typeof FaviconRoute
   '/filters': typeof FiltersRoute
   '/glass': typeof GlassRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
   '/palette': typeof PaletteRoute
   '/pdf': typeof PdfRoute
@@ -197,6 +204,7 @@ export interface FileRoutesByTo {
   '/favicon': typeof FaviconRoute
   '/filters': typeof FiltersRoute
   '/glass': typeof GlassRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
   '/palette': typeof PaletteRoute
   '/pdf': typeof PdfRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/favicon': typeof FaviconRoute
   '/filters': typeof FiltersRoute
   '/glass': typeof GlassRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
   '/palette': typeof PaletteRoute
   '/pdf': typeof PdfRoute
@@ -254,6 +263,7 @@ export interface FileRouteTypes {
     | '/favicon'
     | '/filters'
     | '/glass'
+    | '/llms.txt'
     | '/manifest.webmanifest'
     | '/palette'
     | '/pdf'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/favicon'
     | '/filters'
     | '/glass'
+    | '/llms.txt'
     | '/manifest.webmanifest'
     | '/palette'
     | '/pdf'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/favicon'
     | '/filters'
     | '/glass'
+    | '/llms.txt'
     | '/manifest.webmanifest'
     | '/palette'
     | '/pdf'
@@ -336,6 +348,7 @@ export interface RootRouteChildren {
   FaviconRoute: typeof FaviconRoute
   FiltersRoute: typeof FiltersRoute
   GlassRoute: typeof GlassRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   ManifestDotwebmanifestRoute: typeof ManifestDotwebmanifestRoute
   PaletteRoute: typeof PaletteRoute
   PdfRoute: typeof PdfRoute
@@ -432,6 +445,13 @@ declare module '@tanstack/react-router' {
       path: '/manifest.webmanifest'
       fullPath: '/manifest.webmanifest'
       preLoaderRoute: typeof ManifestDotwebmanifestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/glass': {
@@ -544,6 +564,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaviconRoute: FaviconRoute,
   FiltersRoute: FiltersRoute,
   GlassRoute: GlassRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   ManifestDotwebmanifestRoute: ManifestDotwebmanifestRoute,
   PaletteRoute: PaletteRoute,
   PdfRoute: PdfRoute,
