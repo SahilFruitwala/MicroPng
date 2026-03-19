@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "start": "node dist/server/server.js",
-    "lint": "eslint"
+    "lint": "eslint",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
     "@posthog/react": "^1.8.2",
@@ -37,6 +39,7 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.29.1",
     "@fontsource-variable/dm-sans": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@tailwindcss/vite": "^4.2.2",
@@ -52,6 +55,7 @@
     "tailwindcss": "^4.1.18",
     "typescript": "^5",
     "vite": "^8.0.0",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite-tsconfig-paths": "^6.1.1",
+    "wrangler": "^4.75.0"
   }
 }

@@ -1,11 +1,12 @@
-import { defineConfig } from 'vite'
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteReact from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { cloudflare } from "@cloudflare/vite-plugin";
 
 export default defineConfig({
   // Expose the existing Next-style public env vars to the client.
-  envPrefix: ['NEXT_PUBLIC_', 'VITE_PUBLIC_'],
+  envPrefix: ["NEXT_PUBLIC_", "VITE_PUBLIC_"],
   resolve: {
     tsconfigPaths: true,
   },
@@ -13,24 +14,26 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     proxy: {
-      '/ingest': {
-        target: 'https://us.i.posthog.com',
+      "/ingest": {
+        target: "https://us.i.posthog.com",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/ingest/, ''),
+        rewrite: (path) => path.replace(/^\/ingest/, ""),
         secure: false,
       },
     },
   },
   plugins: [
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
+
     tailwindcss(),
     tanstackStart({
-      srcDirectory: 'src',
+      srcDirectory: "src",
       router: {
-        routesDirectory: 'app',
+        routesDirectory: "app",
         routeFileIgnorePattern:
-          '(^|/)(HomeClient|PostHogClient|NotFoundComponent|.*Client)\\.tsx$',
+          "(^|/)(HomeClient|PostHogClient|NotFoundComponent|.*Client)\\.tsx$",
       },
     }),
     viteReact(),
   ],
-})
+});
