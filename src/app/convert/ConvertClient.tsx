@@ -1,6 +1,5 @@
 "use client";
 
-import { posthog } from 'posthog-js';
 import React, { useState } from 'react';
 import { Link } from '@tanstack/react-router'
 import Navbar from '@/components/Navbar';
@@ -79,11 +78,6 @@ export default function ConvertClient() {
       const pendingFiles = files.filter(f => f.status === 'pending');
       if (pendingFiles.length === 0) return;
 
-      posthog.capture('image_conversion_started', {
-          file_count: pendingFiles.length,
-          target_format: targetFormat,
-      });
-
       setIsProcessing(true);
 
       for (const fileObj of pendingFiles) {
@@ -107,12 +101,6 @@ export default function ConvertClient() {
                 const url = URL.createObjectURL(blob);
 
                 const originalFormat = fileObj.fileRaw?.type.split('/')[1] || 'unknown';
-                posthog.capture('image_conversion_completed', {
-                    original_format: originalFormat,
-                    target_format: targetFormat,
-                    original_size_bytes: fileObj.originalSize,
-                    converted_size_bytes: blob.size,
-                });
 
                 setFiles(prev => prev.map(f => f.id === fileObj.id ? {
                     ...f,
@@ -123,7 +111,6 @@ export default function ConvertClient() {
 
             } catch (error) {
                 console.error(error);
-                posthog.captureException(error);
                  setFiles(prev => prev.map(f => f.id === fileObj.id ? {
                     ...f,
                     status: 'error',

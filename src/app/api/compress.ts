@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import sharp from 'sharp'
-import { getPostHogClient } from '@/lib/posthog-server'
 
 // Configuration: Adjust these limits as needed
 const MAX_WIDTH = 1920
@@ -187,28 +186,6 @@ export const Route = createFileRoute('/api/compress')({
           if (compressionLevel === 'lossless') quality = 100
 
           const processedBuffer = await compressBuffer(quality)
-
-          // Track server-side compression
-          const posthog = getPostHogClient()
-          posthog.capture({
-            distinctId: 'server',
-            event: 'server_image_compressed',
-            properties: {
-              input_format: metadata.format || 'unknown',
-              output_format: targetFormat,
-              compression_level: compressionLevel,
-              original_size_bytes: buffer.length,
-              compressed_size_bytes: processedBuffer.length,
-              reduction_percent: Math.round(
-                buffer.length === 0
-                  ? 0
-                  : ((buffer.length - processedBuffer.length) / buffer.length) *
-                      100,
-              ),
-              did_resize: shouldResize,
-              did_crop: shouldCrop,
-            },
-          })
 
           return new Response(processedBuffer, {
             status: 200,

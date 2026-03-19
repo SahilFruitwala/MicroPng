@@ -12,18 +12,6 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: true,
-    proxy: {
-      '/ingest/static': {
-        target: 'https://us-assets.i.posthog.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/ingest\/static/, '/static'),
-      },
-      '/ingest': {
-        target: 'https://us.i.posthog.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/ingest/, ''),
-      },
-    },
   },
   plugins: [
     tailwindcss(),

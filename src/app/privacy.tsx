@@ -46,21 +46,14 @@ function PrivacyPage() {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">3. Analytics</h2>
+              <h2 className="text-2xl font-bold text-foreground">3. Cookies</h2>
               <p className="text-muted-foreground leading-relaxed">
-                We use PostHog for anonymous usage analytics to help us improve the tool. We track events like &quot;image compressed&quot; or &quot;format changed,&quot; but we do not collect personal data, IP addresses in a way that identifies you, or any content of the images you process.
+                We use minimal cookies for essential site functionality. You can disable these in your browser settings, though it might affect some features.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">4. Cookies</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                We use minimal cookies for essential site functionality and for the anonymous analytics mentioned above. You can disable these in your browser settings, though it might affect some features.
-              </p>
-            </section>
-
-            <section className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">5. Changes to This Policy</h2>
+              <h2 className="text-2xl font-bold text-foreground">4. Changes to This Policy</h2>
               <p className="text-muted-foreground leading-relaxed">
                 We may update this policy from time to time. Any changes will be posted on this page with an updated revision date.
               </p>

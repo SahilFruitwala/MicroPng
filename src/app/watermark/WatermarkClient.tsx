@@ -1,6 +1,5 @@
 "use client";
 
-import { posthog } from 'posthog-js';
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -104,15 +103,6 @@ export default function WatermarkClient() {
             try {
                 const result = await processWatermark();
 
-                posthog.capture('watermark_applied', {
-                    watermark_type: watermarkConfig.type,
-                    opacity: watermarkConfig.opacity,
-                    position: watermarkConfig.position,
-                    original_size_bytes: file.size,
-                    result_size_bytes: result.blob.size,
-                    time_ms: Math.round(result.time),
-                });
-
                 setFiles(prev => prev.map(f => {
                     if (f.id !== fileId) return f;
 
@@ -133,7 +123,6 @@ export default function WatermarkClient() {
 
             } catch (error) {
                 console.error(error);
-                posthog.captureException(error);
                  setFiles(prev => prev.map(f => f.id === fileId ? {
                     ...f,
                     status: 'error',

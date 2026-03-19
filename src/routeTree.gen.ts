@@ -29,12 +29,10 @@ import { Route as ConvertRouteImport } from './app/convert'
 import { Route as CompareRouteImport } from './app/compare'
 import { Route as CliRouteImport } from './app/cli'
 import { Route as IndexRouteImport } from './app/index'
-import { Route as IngestSplatRouteImport } from './app/ingest/$'
 import { Route as ApiWatermarkRouteImport } from './app/api/watermark'
 import { Route as ApiScrubRouteImport } from './app/api/scrub'
 import { Route as ApiFaviconRouteImport } from './app/api/favicon'
 import { Route as ApiCompressRouteImport } from './app/api/compress'
-import { Route as IngestStaticSplatRouteImport } from './app/ingest/static/$'
 
 const WatermarkRoute = WatermarkRouteImport.update({
   id: '/watermark',
@@ -136,11 +134,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IngestSplatRoute = IngestSplatRouteImport.update({
-  id: '/ingest/$',
-  path: '/ingest/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiWatermarkRoute = ApiWatermarkRouteImport.update({
   id: '/api/watermark',
   path: '/api/watermark',
@@ -159,11 +152,6 @@ const ApiFaviconRoute = ApiFaviconRouteImport.update({
 const ApiCompressRoute = ApiCompressRouteImport.update({
   id: '/api/compress',
   path: '/api/compress',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IngestStaticSplatRoute = IngestStaticSplatRouteImport.update({
-  id: '/ingest/static/$',
-  path: '/ingest/static/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -192,8 +180,6 @@ export interface FileRoutesByFullPath {
   '/api/favicon': typeof ApiFaviconRoute
   '/api/scrub': typeof ApiScrubRoute
   '/api/watermark': typeof ApiWatermarkRoute
-  '/ingest/$': typeof IngestSplatRoute
-  '/ingest/static/$': typeof IngestStaticSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -220,8 +206,6 @@ export interface FileRoutesByTo {
   '/api/favicon': typeof ApiFaviconRoute
   '/api/scrub': typeof ApiScrubRoute
   '/api/watermark': typeof ApiWatermarkRoute
-  '/ingest/$': typeof IngestSplatRoute
-  '/ingest/static/$': typeof IngestStaticSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -249,8 +233,6 @@ export interface FileRoutesById {
   '/api/favicon': typeof ApiFaviconRoute
   '/api/scrub': typeof ApiScrubRoute
   '/api/watermark': typeof ApiWatermarkRoute
-  '/ingest/$': typeof IngestSplatRoute
-  '/ingest/static/$': typeof IngestStaticSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -279,8 +261,6 @@ export interface FileRouteTypes {
     | '/api/favicon'
     | '/api/scrub'
     | '/api/watermark'
-    | '/ingest/$'
-    | '/ingest/static/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -307,8 +287,6 @@ export interface FileRouteTypes {
     | '/api/favicon'
     | '/api/scrub'
     | '/api/watermark'
-    | '/ingest/$'
-    | '/ingest/static/$'
   id:
     | '__root__'
     | '/'
@@ -335,8 +313,6 @@ export interface FileRouteTypes {
     | '/api/favicon'
     | '/api/scrub'
     | '/api/watermark'
-    | '/ingest/$'
-    | '/ingest/static/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -364,8 +340,6 @@ export interface RootRouteChildren {
   ApiFaviconRoute: typeof ApiFaviconRoute
   ApiScrubRoute: typeof ApiScrubRoute
   ApiWatermarkRoute: typeof ApiWatermarkRoute
-  IngestSplatRoute: typeof IngestSplatRoute
-  IngestStaticSplatRoute: typeof IngestStaticSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -510,13 +484,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ingest/$': {
-      id: '/ingest/$'
-      path: '/ingest/$'
-      fullPath: '/ingest/$'
-      preLoaderRoute: typeof IngestSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/watermark': {
       id: '/api/watermark'
       path: '/api/watermark'
@@ -543,13 +510,6 @@ declare module '@tanstack/react-router' {
       path: '/api/compress'
       fullPath: '/api/compress'
       preLoaderRoute: typeof ApiCompressRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ingest/static/$': {
-      id: '/ingest/static/$'
-      path: '/ingest/static/$'
-      fullPath: '/ingest/static/$'
-      preLoaderRoute: typeof IngestStaticSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -580,8 +540,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiFaviconRoute: ApiFaviconRoute,
   ApiScrubRoute: ApiScrubRoute,
   ApiWatermarkRoute: ApiWatermarkRoute,
-  IngestSplatRoute: IngestSplatRoute,
-  IngestStaticSplatRoute: IngestStaticSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

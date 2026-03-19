@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import sharp from 'sharp'
-import { getPostHogClient } from '@/lib/posthog-server'
 
 // Configuration: Adjust these limits as needed
 const MAX_WIDTH = 8192
@@ -146,21 +145,6 @@ export const Route = createFileRoute('/api/watermark')({
           const processedBuffer = await pipeline
             .toFormat(targetFormat as any, { quality: DEFAULT_QUALITY })
             .toBuffer()
-
-          // Track server-side watermark event
-          const posthog = getPostHogClient()
-          posthog.capture({
-            distinctId: 'server',
-            event: 'server_watermark_applied',
-            properties: {
-              watermark_type: watermarkType || 'none',
-              watermark_position: watermarkPosition,
-              watermark_opacity: watermarkOpacity,
-              output_format: targetFormat,
-              original_size_bytes: buffer.length,
-              result_size_bytes: processedBuffer.length,
-            },
-          })
 
           return new Response(processedBuffer, {
             status: 200,

@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import sharp from 'sharp'
-import { getPostHogClient } from '@/lib/posthog-server'
 
 export const Route = createFileRoute('/api/scrub')({
   server: {
@@ -46,18 +45,6 @@ export const Route = createFileRoute('/api/scrub')({
 
             // Strip metadata: Sharp strips metadata by default unless .withMetadata() is called.
             const scrubbedBuffer = await pipeline.toBuffer()
-
-            // Track server-side scrub event
-            const posthog = getPostHogClient()
-            posthog.capture({
-              distinctId: 'server',
-              event: 'server_metadata_scrubbed',
-              properties: {
-                file_format: format || 'unknown',
-                original_size_bytes: buffer.length,
-                scrubbed_size_bytes: scrubbedBuffer.length,
-              },
-            })
 
             return new Response(scrubbedBuffer, {
               headers: {
