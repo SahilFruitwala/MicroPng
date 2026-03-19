@@ -1,6 +1,6 @@
 "use client";
 
-import posthog from 'posthog-js';
+import { posthog } from 'posthog-js';
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';

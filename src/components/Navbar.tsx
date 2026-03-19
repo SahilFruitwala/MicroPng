@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { Menu, X, Github, Zap, Palette, FileText, Layout, ChevronDown, Terminal } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import Button from "./ui/Button";
+import { Link, useLocation } from '@tanstack/react-router'
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const { pathname } = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isToolsOpen, setIsToolsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -85,13 +83,14 @@ export default function Navbar() {
       `}>
         <div className="flex items-center justify-between mx-auto max-w-7xl">
 
-          <Link href="/" className="flex items-center gap-2 group relative z-50">
+          <Link to="/" className="flex items-center gap-2 group relative z-50">
             <div className="relative w-8 h-8 sm:w-10 sm:h-10 overflow-hidden rounded-xl border border-border/50 shadow-sm transition-transform group-hover:scale-105">
-              <Image
+              <img
                 src="/icon.webp"
                 alt="MicroPng"
-                fill
-                className="object-cover"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover"
               />
             </div>
             <span className="text-lg sm:text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
@@ -100,12 +99,13 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">Compress</Link>
-            <Link href="/cli" className="text-sm font-medium hover:text-primary transition-colors">CLI</Link>
-            <Link href="/favicon" className="text-sm font-medium hover:text-primary transition-colors">Favicon</Link>
+            <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">Compress</Link>
+            <Link to="/cli" className="text-sm font-medium hover:text-primary transition-colors">CLI</Link>
+            <Link to="/favicon" className="text-sm font-medium hover:text-primary transition-colors">Favicon</Link>
 
             <div className="relative" ref={dropdownRef}>
                 <button
+                  type="button"
                   onClick={() => setIsToolsOpen(!isToolsOpen)}
                   className="px-4 py-2 font-medium text-sm text-foreground hover:text-primary transition-colors flex items-center gap-1 group"
                 >
@@ -125,7 +125,7 @@ export default function Navbar() {
                                 {cat.links.map((item) => (
                                     <Link
                                         key={item.href}
-                                        href={item.href}
+                                        to={item.href}
                                         onClick={() => setIsToolsOpen(false)}
                                         className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all group"
                                     >
@@ -140,19 +140,21 @@ export default function Navbar() {
             </div>
 
             <div className="hidden md:flex items-center gap-4">
-              <Link
+              <a
                 href="https://github.com/SahilFruitwala/micropng"
                 target="_blank"
+                rel="noreferrer"
                 className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
               >
                 <Github size={20} />
-              </Link>
+              </a>
               <ThemeToggle />
             </div>
           </div>
 
           {/* Mobile Menu Button */}
           <button
+            type="button"
             className={`md:hidden p-2 active:scale-95 transition-transform relative z-[110] transition-colors ${isMenuOpen ? 'text-primary' : 'text-foreground'}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -172,7 +174,7 @@ export default function Navbar() {
                   ].map((link) => (
                       <Link 
                           key={link.href}
-                          href={link.href} 
+                          to={link.href} 
                           onClick={() => setIsMenuOpen(false)} 
                           className={`flex items-center gap-3 text-lg font-bold p-4 rounded-2xl border transition-all ${
                               pathname === link.href
@@ -196,7 +198,7 @@ export default function Navbar() {
                           {cat.links.map((link) => (
                               <Link 
                                   key={link.href}
-                                  href={link.href} 
+                                  to={link.href} 
                                   onClick={() => setIsMenuOpen(false)} 
                                   className={`text-sm font-medium p-3 rounded-xl border transition-all ${
                                       pathname === link.href

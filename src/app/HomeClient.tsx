@@ -1,7 +1,7 @@
 "use client";
 
 import imageCompression from 'browser-image-compression';
-import posthog from 'posthog-js';
+import { posthog } from 'posthog-js';
 
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
@@ -16,7 +16,7 @@ import { MAX_SERVER_IMAGES, MAX_BROWSER_IMAGES, LIMIT_REASONS } from '@/lib/cons
 import PageHeader from '@/components/ui/PageHeader';
 import GlassCard from '@/components/ui/GlassCard';
 import { Terminal, ArrowRight, Github } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router'
 
 export default function HomeClient() {
   const [files, setFiles] = useState<CompressedFile[]>([]);
@@ -524,7 +524,7 @@ export default function HomeClient() {
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Link 
-                    href="/cli" 
+                    to="/cli" 
                     className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm flex items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20"
                   >
                     Explore CLI

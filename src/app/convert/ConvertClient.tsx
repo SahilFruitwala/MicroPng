@@ -1,8 +1,8 @@
 "use client";
 
-import posthog from 'posthog-js';
+import { posthog } from 'posthog-js';
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router'
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Dropzone from '@/components/Dropzone';
@@ -139,7 +139,7 @@ export default function ConvertClient() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-center">
+    <div className="min-h-screen relative overflow-hidden bg-background">
       
       <Navbar />
 
@@ -218,7 +218,7 @@ export default function ConvertClient() {
                             </p>
                         </div>
                         <Link 
-                            href="/cli" 
+                            to="/cli" 
                             className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/10 flex items-center gap-2"
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>

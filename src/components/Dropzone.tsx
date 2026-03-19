@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useId, useState, useRef } from 'react';
 import { Upload, Image as ImageIcon, FileWarning } from 'lucide-react';
 
 interface DropzoneProps {
@@ -18,6 +18,7 @@ export default function Dropzone({
 }: DropzoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputId = useId();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -50,7 +51,10 @@ export default function Dropzone({
   const displayFormats = accept.split(',').map(f => f.trim().split('/').pop()?.toUpperCase()).filter(Boolean);
 
   return (
-    <div
+    <label
+      htmlFor={inputId}
+      role="button"
+      tabIndex={isCompressing ? -1 : 0}
       className={`relative group cursor-pointer transition-all duration-300 w-full max-w-2xl mx-auto
         min-h-[300px] flex flex-col items-center justify-center text-center p-6 sm:p-10
         border-2 border-dashed rounded-3xl
@@ -65,12 +69,19 @@ export default function Dropzone({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
     >
       <input 
+        id={inputId}
         type="file" 
         ref={fileInputRef} 
         onChange={handleFileInput} 
-        className="hidden" 
+        className="sr-only" 
         accept={accept}
         multiple
       />
@@ -108,7 +119,6 @@ export default function Dropzone({
             </div>
         </>
       )}
-    </div>
+    </label>
   );
 }
-

@@ -1,6 +1,4 @@
-const config = {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
-};
-export default config;
+export default {
+  // Tailwind is handled via the Vite plugin (`@tailwindcss/vite`) in this project.
+  plugins: [],
+}

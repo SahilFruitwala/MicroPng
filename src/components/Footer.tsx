@@ -1,6 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router'
 import { Github, Heart, ShieldCheck, Zap, Terminal } from 'lucide-react';
 
 export default function Footer() {
@@ -13,7 +12,13 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2 space-y-4">
              <div className="flex items-center gap-2">
                 <div className="relative w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center border border-border shadow-sm">
-                    <Image src="/icon.webp" alt="MicroPng Logo" width={32} height={32} className="object-contain" />
+                    <img
+                      src="/icon.webp"
+                      alt="MicroPng Logo"
+                      width={32}
+                      height={32}
+                      className="object-contain"
+                    />
                 </div>
                 <span className="text-xl font-bold tracking-tight text-foreground">MicroPng</span>
              </div>
@@ -27,18 +32,18 @@ export default function Footer() {
           <div className="space-y-4">
              <h4 className="font-semibold text-foreground">Tools</h4>
              <div className="flex flex-col gap-2">
-                 <Link href="/convert" className="text-muted-foreground hover:text-primary transition-colors">Convert</Link>
-                 <Link href="/resize" className="text-muted-foreground hover:text-primary transition-colors">Resize</Link>
-                 <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Compress</Link>
+                 <Link to="/convert" className="text-muted-foreground hover:text-primary transition-colors">Convert</Link>
+                 <Link to="/resize" className="text-muted-foreground hover:text-primary transition-colors">Resize</Link>
+                 <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Compress</Link>
              </div>
           </div>
 
           <div className="space-y-4">
              <h4 className="font-semibold text-foreground">Legal & Code</h4>
              <div className="flex flex-col gap-2">
-                 <Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy</Link>
-                 <Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms</Link>
-                 <Link href="/cli" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 focus-visible:outline-none">
+                 <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy</Link>
+                 <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms</Link>
+                 <Link to="/cli" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 focus-visible:outline-none">
                     <Terminal size={12} />
                     CLI Tool
                  </Link>
@@ -54,7 +59,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
              <span>Made with</span>
              <Heart size={12} className="text-destructive fill-destructive" />
-             <span>and 🍊 using Next.js</span>
+             <span>and orange pixels on TanStack Start</span>
           </div>
         </div>
       </div>

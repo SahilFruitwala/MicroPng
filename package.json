@@ -2,14 +2,18 @@
   "name": "micropng",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "node dist/server/server.js",
     "lint": "eslint"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "@tanstack/react-router": "^1.167.5",
+    "@tanstack/react-start": "^1.166.17",
+    "@unpic/react": "^1.0.2",
     "@vercel/analytics": "^1.6.1",
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
@@ -19,7 +23,6 @@
     "imagetracerjs": "^1.2.6",
     "jszip": "^3.10.1",
     "lucide-react": "^0.563.0",
-    "next": "16.1.4",
     "next-themes": "^0.4.6",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.4.168",
@@ -34,17 +37,21 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.18",
+    "@fontsource-variable/dm-sans": "^5.2.8",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@tailwindcss/vite": "^4.2.2",
     "@types/colorthief": "^2.6.1",
     "@types/jszip": "^3.4.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.4.23",
     "eslint": "^9",
-    "eslint-config-next": "16.1.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^8.0.0",
+    "vite-tsconfig-paths": "^6.1.1"
   }
 }

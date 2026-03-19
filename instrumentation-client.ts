@@ -1,6 +1,8 @@
-import posthog from "posthog-js";
+import { posthog } from 'posthog-js'
 
-posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+const posthogKey = import.meta.env.NEXT_PUBLIC_POSTHOG_KEY as string
+
+posthog.init(posthogKey, {
   api_host: "/ingest",
   ui_host: "https://us.posthog.com",
   // Include the defaults option as required by PostHog
@@ -8,7 +10,7 @@ posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
   // Enables capturing unhandled exceptions via Error Tracking
   capture_exceptions: true,
   // Turn on debug in development mode
-  debug: process.env.NODE_ENV === "development",
+  debug: import.meta.env.DEV,
 });
 
 // IMPORTANT: Never combine this approach with other client-side PostHog initialization approaches,
