@@ -150,6 +150,7 @@ function FaviconPage() {
     link.href = url
     link.download = 'favicons.zip'
     link.click()
+    setTimeout(() => URL.revokeObjectURL(url), 0)
   }
 
   const handleReset = () => {

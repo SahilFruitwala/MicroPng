@@ -8,7 +8,6 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { ThemeProvider } from '@/components/ThemeProvider'
-import PostHogClient from './PostHogClient'
 import './globals.css'
 
 const canonicalUrl = 'https://micropng.sahilfruitwala.com'
@@ -78,7 +77,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           disableTransitionOnChange
         >
           {children}
-          <PostHogClient />
           <Analytics />
         </ThemeProvider>
         <Scripts />

@@ -38,10 +38,6 @@ export default function Dropzone({
     }
   };
 
-  const handleClick = () => {
-    fileInputRef.current?.click();
-  };
-
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       onFileSelect(Array.from(e.target.files));
@@ -68,11 +64,10 @@ export default function Dropzone({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={handleClick}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          handleClick();
+          fileInputRef.current?.click();
         }
       }}
     >

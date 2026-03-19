@@ -200,7 +200,10 @@ export const Route = createFileRoute('/api/compress')({
               original_size_bytes: buffer.length,
               compressed_size_bytes: processedBuffer.length,
               reduction_percent: Math.round(
-                ((buffer.length - processedBuffer.length) / buffer.length) * 100,
+                buffer.length === 0
+                  ? 0
+                  : ((buffer.length - processedBuffer.length) / buffer.length) *
+                      100,
               ),
               did_resize: shouldResize,
               did_crop: shouldCrop,
